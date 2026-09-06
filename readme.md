@@ -21,7 +21,7 @@ FACILE is an AI-powered, voice-first shopping platform built on a microservices 
 
 🔗 **Live Demo:** [Coming Soon]()
 
-**🔗 Live Demo:** _Coming soon_
+
 
 </div>
 
@@ -31,7 +31,7 @@ FACILE is an AI-powered, voice-first shopping platform built on a microservices 
 
 - [Features](#-features)
 - [How It Works](#-how-it-works)
-- [Screenshots](#-screenshots)
+- [Product Preview](#-screenshots)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
 - [Getting Started](#-getting-started)
@@ -142,22 +142,60 @@ FACILE is an AI-powered, voice-first shopping platform built on a microservices 
 
 ## 📁 Project Structure
 
-\`\`\`text
+```text
 FACILE/
-├── FRONTEND/                        # Next.js storefront (voice-powered UI)
-├── auth-user-service/               # Spring Boot — authentication & users
-├── order-cart-service/              # Spring Boot — cart & orders (MongoDB, Redis)
-├── payment-notification-service/    # Spring Boot — payments & notifications
-├── product-inventory-service/       # Node.js — product catalog & inventory
-├── scripts/                         # Dev automation (frontend/inventory launchers, Whisper setup)
-├── .vscode/
-├── docker-compose.yml               # MongoDB, Redis, PostgreSQL for local dev
+├── FRONTEND/
+│   ├── app/
+│   │   ├── (auth)/
+│   │   ├── (shop)/
+│   │   ├── admin/
+│   │   ├── seller/
+│   │   └── api/
+│   ├── components/
+│   ├── context/
+│   ├── lib/
+│   └── public/
+├── auth-user-service/
+│   └── src/
+│       ├── main/java/com/facile/auth_user_service/
+│       │   ├── config/
+│       │   ├── controller/
+│       │   ├── dto/
+│       │   ├── model/
+│       │   ├── repository/
+│       │   └── service/
+│       └── main/resources/
+├── order-cart-service/
+│   └── src/
+│       ├── main/java/com/facile/order_cart_service/
+│       │   ├── config/
+│       │   ├── controller/
+│       │   ├── model/
+│       │   ├── repository/
+│       │   └── service/
+│       └── main/resources/
+├── payment-notification-service/
+│   └── src/
+│       ├── main/java/com/facile/payment_notification_service/
+│       │   ├── controller/
+│       │   ├── model/
+│       │   └── service/
+│       └── main/resources/
+├── product-inventory-service/
+│   ├── controllers/
+│   ├── routes/
+│   ├── services/
+│   └── package.json
+├── scripts/
+│   └── database-migration/
+├── docker-compose.yml
+├── render.yaml
 ├── supabase_migration.sql
 ├── product_images_migration.sql
 ├── review_rating_migration.sql
-├── package.json                     # Root scripts to run the whole stack together
-└── README.md
-\`\`\`
+├── package.json
+└── readme.md
+```
 
 ---
 
@@ -250,6 +288,5 @@ For any queries, feel free to open an issue in this repository.
 
 <div align="center">
 
-Made with 🎙️ and a lot of ☕
 
 </div>
