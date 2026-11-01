@@ -108,19 +108,42 @@ public class JwtService {
 
     private SecretKey getSignInKey() {
         String configuredKey = secretKey == null ? "" : secretKey.trim();
-        boolean hexOnly = !configuredKey.isEmpty() && configuredKey.matches("[0-9a-fA-F]+");
+        byte[] keyBytes;
 
-        // TEMPORARY JWT DIAGNOSTIC: remove after the Render JWT_SECRET format is confirmed.
-        log.warn(
-                "JWT config diagnostic: variable=JWT_SECRET, present={}, blank={}, length={}, evenLength={}, expectedEncoding=hex, detectedHex={}",
-                secretKey != null,
-                configuredKey.isEmpty(),
-                configuredKey.length(),
-                configuredKey.length() % 2 == 0,
-                hexOnly
-        );
+        if (configuredKey.length() % 2 == 0 && configuredKey.matches("^[0-9a-fA-F]+$")) {
+            try {
+                keyBytes = java.util.HexFormat.of().parseHex(configuredKey);
+            } catch (Exception e) {
+                keyBytes = configuredKey.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+            }
+        } else {
+            byte[] decoded = null;
+            try {
+                decoded = java.util.Base64.getDecoder().decode(configuredKey);
+            } catch (IllegalArgumentException e1) {
+                try {
+                    decoded = java.util.Base64.getUrlDecoder().decode(configuredKey);
+                } catch (IllegalArgumentException e2) {
+                    // Not valid base64
+                }
+            }
 
-        byte[] keyBytes = java.util.HexFormat.of().parseHex(configuredKey);
+            if (decoded != null && decoded.length >= 32) {
+                keyBytes = decoded;
+            } else {
+                keyBytes = configuredKey.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+            }
+        }
+
+        if (keyBytes.length < 32) {
+            try {
+                java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
+                keyBytes = md.digest(keyBytes);
+            } catch (java.security.NoSuchAlgorithmException e) {
+                throw new IllegalStateException("SHA-256 algorithm not available", e);
+            }
+        }
+
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
